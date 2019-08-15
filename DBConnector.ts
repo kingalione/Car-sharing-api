@@ -23,15 +23,31 @@ class DBConnector {
   }
 
   //fetch data from specific collection for a query
-  fetch(from: string, query: object) {
+  fetch(from: string, query: object): Promise<any> {
     return new Promise((resolve, reject) => {
       this.databaseObject
         .collection(from)
         .find(query)
-        .toArray(function(err, result) {
+        .toArray((err, result) => {
           if (err) reject(err);
           resolve(result);
         });
+    });
+  }
+
+  //fetch all data from specific collection
+  fetchAll(from: string): Promise<any> {
+    return this.fetch(from, {});
+  }
+
+  //insert a single document to specific collection
+  insert(into: string, obj: object): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.databaseObject.collection(into).insertOne(obj, (err, res) => {
+        if (err) reject(err);
+        console.log('Document inserted');
+        resolve();
+      });
     });
   }
 
