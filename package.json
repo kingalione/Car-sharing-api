@@ -6,6 +6,7 @@
   "author": "Ali Karadag <ali.karadag@chronext.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/mongodb": "^3.2.2",
     "mongodb": "^3.3.0",
     "ts-node": "^8.3.0"
   }
