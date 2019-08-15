@@ -1,21 +1,16 @@
-import { MongoClient } from 'mongodb';
+import { DBConnector } from './DBConnector';
 
-const uri: string =
-  'mongodb+srv://e-go:password4e-go@e-go-project-edbkz.mongodb.net/test?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://e-go:password4e-go@e-go-project-edbkz.mongodb.net';
 
-const client: MongoClient = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+const dbConnector = new DBConnector(uri);
+dbConnector.connect().then(() => {
+  dbConnector.fetchAll('cars').then(cars => {
+    console.log(cars);
+  });
 
-client.connect(err => {
-  if (err) {
-    console.log(err);
-    return;
-  }
-
-  const collection = client.db('test').collection('devices');
-  console.log(collection);
-
-  client.close();
+  dbConnector.insert('cars', {
+    name: 'Magnus',
+    count: 123,
+    time: new Date()
+  });
 });
