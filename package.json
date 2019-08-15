@@ -5,7 +5,5 @@
   "repository": "https://github.com/kingalione/E-Go-Project",
   "author": "Ali Karadag <ali.karadag@chronext.com>",
   "license": "MIT",
-  "dependencies": {
-    "node-json-db": "^1.0.1"
-  }
+  "dependencies": {}
 }
