@@ -16,8 +16,10 @@ class DBConnector {
     return new Promise((resolve, reject) => {
       this.client.connect((err, db) => {
         if (err) reject(err);
-        this.databaseObject = db.db('e-go_project');
-        resolve(this.databaseObject);
+        else {
+          this.databaseObject = db.db('e-go_project');
+          resolve(this.databaseObject);
+        }
       });
     });
   }
@@ -30,7 +32,7 @@ class DBConnector {
         .find(query)
         .toArray((err, result) => {
           if (err) reject(err);
-          resolve(result);
+          else resolve(result);
         });
     });
   }
@@ -45,8 +47,10 @@ class DBConnector {
     return new Promise((resolve, reject) => {
       this.databaseObject.collection(into).insertOne(obj, (err, res) => {
         if (err) reject(err);
-        console.log('Document inserted');
-        resolve();
+        else {
+          console.log('Document inserted');
+          resolve();
+        }
       });
     });
   }
