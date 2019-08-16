@@ -1,6 +1,7 @@
 import { Database } from './Database';
 import { ObjectID } from 'bson';
 import * as express from 'express';
+import bodyParser = require('body-parser');
 
 require('dotenv').config();
 
@@ -11,8 +12,9 @@ const database = new Database(uri);
 database.connect();
 
 const app = express();
+app.use(bodyParser.json());
 
-app.get('/cars', function(req, res) {
+app.get('/cars', (req, res) => {
   let result: object[] = [];
 
   if (database.connected) {
@@ -24,14 +26,14 @@ app.get('/cars', function(req, res) {
       })
       .catch(error => {
         console.log(error);
-        res.send(error);
+        res.status(500).send(error);
       });
   } else {
-    res.send('Database not connected yet.');
+    res.status(500).send('Database not connected yet.');
   }
 });
 
-app.get('/cars/:id', function(req, res) {
+app.get('/cars/:id', (req, res) => {
   let result: object[] = [];
 
   if (database.connected) {
@@ -43,10 +45,26 @@ app.get('/cars/:id', function(req, res) {
       })
       .catch(error => {
         console.log(error);
-        res.send(error);
+        res.status(400).send(error);
       });
   } else {
-    res.send('Database not connected yet.');
+    res.status(500).send('Database not connected yet.');
+  }
+});
+
+app.post('/cars', (req, res) => {
+  if (database.connected) {
+    database
+      .insert('cars', req.body)
+      .then(() => {
+        res.send();
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  } else {
+    res.status(500).send('Database not connected yet.');
   }
 });
 

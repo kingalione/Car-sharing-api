@@ -53,7 +53,6 @@ class Database {
       this.databaseObject.collection(into).insertOne(obj, (err, res) => {
         if (err) reject(err);
         else {
-          console.log('Document inserted');
           resolve();
         }
       });
