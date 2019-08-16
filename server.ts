@@ -7,32 +7,8 @@ require('dotenv').config();
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
   process.env.DB_HOST
 }`;
-
 const database = new Database(uri);
 database.connect();
-
-database
-  .connect()
-  .then(() => {
-    database
-      .insert('cars', {
-        name: 'Koloss',
-        count: -1,
-        time: new Date()
-      })
-      .catch((error: any) => {
-        //console.log(error);
-      });
-  })
-  .catch((error: any) => {
-    //console.log(error);
-  });
-
-//-------------//
-//-------------//
-//-------------//
-//-------------//
-//-------------//
 
 const app = express();
 
