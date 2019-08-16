@@ -60,6 +60,11 @@ app.get('/cars/:id', (req, res) => {
 //create new car
 app.post('/cars', (req, res) => {
   if (database.connected) {
+    //delete _id
+    if (req.body._id) delete req.body._id;
+    //parse date/time obj
+    if (req.body.time) req.body.time = new Date(req.body.time);
+
     database
       .insert('cars', req.body)
       .then(response => {
@@ -77,7 +82,10 @@ app.post('/cars', (req, res) => {
 //update a car
 app.put('/cars/:id', (req, res) => {
   if (database.connected) {
+    //delete _id
     if (req.body._id) delete req.body._id;
+    //parse date/time obj
+    if (req.body.time) req.body.time = new Date(req.body.time);
 
     database
       .updateById('cars', req.params.id, req.body)
