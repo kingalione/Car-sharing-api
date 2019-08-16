@@ -1,6 +1,9 @@
 import { DBConnector } from './DBConnector';
+require('dotenv').config();
 
-const uri = 'mongodb+srv://e-go:password4e-go@e-go-project-edbkz.mongodb.net';
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
+  process.env.DB_HOST
+}`;
 
 const dbConnector = new DBConnector(uri);
 
