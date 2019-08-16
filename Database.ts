@@ -1,4 +1,4 @@
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient, Db, ObjectID } from 'mongodb';
 
 class Database {
   connected: boolean;
@@ -56,6 +56,26 @@ class Database {
           resolve();
         }
       });
+    });
+  }
+
+  //updates a single document by its id
+  updateById(inside: string, id: string, update: object): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.databaseObject
+        .collection(inside)
+        .updateOne({ _id: new ObjectID(id) }, { $set: update }, (err, res) => {
+          if (err) reject(err);
+          else {
+            //double check if any update happend because if the id does not exists
+            //there will be no error thrown by mongodb
+            if (res.result.n === 1) resolve(res);
+            else
+              reject(
+                `Update for id: ${id} could not get accomplished. Maybe the id is not existing.`
+              );
+          }
+        });
     });
   }
 

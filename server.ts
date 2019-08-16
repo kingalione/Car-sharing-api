@@ -52,12 +52,33 @@ app.get('/cars/:id', (req, res) => {
   }
 });
 
+//create new car
 app.post('/cars', (req, res) => {
   if (database.connected) {
     database
       .insert('cars', req.body)
       .then(() => {
         res.send();
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  } else {
+    res.status(500).send('Database not connected yet.');
+  }
+});
+
+//update a car
+app.put('/cars/:id', (req, res) => {
+  let result: object[] = [];
+
+  if (database.connected) {
+    database
+      .updateById('cars', req.params.id, req.body)
+      .then(car => {
+        result = car;
+        res.json(result);
       })
       .catch(error => {
         console.log(error);
