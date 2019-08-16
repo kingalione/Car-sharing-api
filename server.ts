@@ -13,6 +13,8 @@ database.connect();
 
 const app = express();
 app.use(bodyParser.json());
+
+//allow CORS
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
@@ -24,8 +26,6 @@ app.use((req, res, next) => {
 });
 
 app.get('/cars', (req, res) => {
-  let result: object[] = [];
-
   if (database.connected) {
     database
       .fetchAll('cars')
