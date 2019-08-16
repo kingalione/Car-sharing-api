@@ -1,6 +1,7 @@
 import { Database } from './Database';
 import { ObjectID } from 'bson';
 import * as express from 'express';
+import bodyParser = require('body-parser');
 
 require('dotenv').config();
 
@@ -11,42 +12,101 @@ const database = new Database(uri);
 database.connect();
 
 const app = express();
+app.use(bodyParser.json());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  next();
+});
 
-app.get('/cars', function(req, res) {
+app.get('/cars', (req, res) => {
   let result: object[] = [];
 
   if (database.connected) {
     database
       .fetchAll('cars')
-      .then((cars: object[]) => {
-        result = cars;
-        res.json(result);
+      .then(response => {
+        res.json(response);
       })
       .catch(error => {
         console.log(error);
-        res.send(error);
+        res.status(500).send(error);
       });
   } else {
-    res.send('Database not connected yet.');
+    res.status(500).send('Database not connected yet.');
   }
 });
 
-app.get('/cars/:id', function(req, res) {
-  let result: object[] = [];
-
+app.get('/cars/:id', (req, res) => {
   if (database.connected) {
     database
       .fetch('cars', { _id: new ObjectID(req.params.id) })
-      .then(car => {
-        result = car;
-        res.json(result);
+      .then(response => {
+        res.json(response);
       })
       .catch(error => {
         console.log(error);
-        res.send(error);
+        res.status(400).send(error);
       });
   } else {
-    res.send('Database not connected yet.');
+    res.status(500).send('Database not connected yet.');
+  }
+});
+
+//create new car
+app.post('/cars', (req, res) => {
+  if (database.connected) {
+    database
+      .insert('cars', req.body)
+      .then(response => {
+        res.json(response);
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  } else {
+    res.status(500).send('Database not connected yet.');
+  }
+});
+
+//update a car
+app.put('/cars/:id', (req, res) => {
+  if (database.connected) {
+    if (req.body._id) delete req.body._id;
+
+    database
+      .updateById('cars', req.params.id, req.body)
+      .then(response => {
+        res.json(response);
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  } else {
+    res.status(500).send('Database not connected yet.');
+  }
+});
+
+//deletes a car
+app.delete('/cars/:id', (req, res) => {
+  if (database.connected) {
+    database
+      .deleteById('cars', req.params.id)
+      .then(response => {
+        res.json(response);
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  } else {
+    res.status(500).send('Database not connected yet.');
   }
 });
 
