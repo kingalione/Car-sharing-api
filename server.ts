@@ -77,6 +77,8 @@ app.post('/cars', (req, res) => {
 //update a car
 app.put('/cars/:id', (req, res) => {
   if (database.connected) {
+    if (req.body._id) delete req.body._id;
+
     database
       .updateById('cars', req.params.id, req.body)
       .then(response => {
