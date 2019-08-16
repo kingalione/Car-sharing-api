@@ -1,6 +1,6 @@
 import { MongoClient, Db } from 'mongodb';
 
-class DBConnector {
+class Database {
   connected: boolean;
   client: MongoClient;
   databaseObject: Db;
@@ -66,4 +66,4 @@ class DBConnector {
   }
 }
 
-export { DBConnector };
+export { Database };
