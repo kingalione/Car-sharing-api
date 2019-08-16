@@ -1,34 +1,53 @@
-import { DBConnector } from './DBConnector';
+import { Database } from './Database';
+import { ObjectID } from 'bson';
+import * as express from 'express';
+
 require('dotenv').config();
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
   process.env.DB_HOST
 }`;
+const database = new Database(uri);
+database.connect();
 
-const dbConnector = new DBConnector(uri);
+const app = express();
 
-dbConnector
-  .connect()
-  .then(() => {
-    dbConnector
+app.get('/cars', function(req, res) {
+  let result: object[] = [];
+
+  if (database.connected) {
+    database
       .fetchAll('cars')
-      .then(cars => {
-        console.log(cars);
+      .then((cars: object[]) => {
+        result = cars;
+        res.json(result);
       })
       .catch(error => {
         console.log(error);
+        res.send(error);
       });
+  } else {
+    res.send('Database not connected yet.');
+  }
+});
 
-    dbConnector
-      .insert('cars', {
-        name: 'Koloss',
-        count: -1,
-        time: new Date()
+app.get('/cars/:id', function(req, res) {
+  let result: object[] = [];
+
+  if (database.connected) {
+    database
+      .fetch('cars', { _id: new ObjectID(req.params.id) })
+      .then(car => {
+        result = car;
+        res.json(result);
       })
       .catch(error => {
         console.log(error);
+        res.send(error);
       });
-  })
-  .catch(error => {
-    console.log(error);
-  });
+  } else {
+    res.send('Database not connected yet.');
+  }
+});
+
+app.listen(3000);
