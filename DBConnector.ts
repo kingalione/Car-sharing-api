@@ -1,10 +1,12 @@
 import { MongoClient, Db } from 'mongodb';
 
 class DBConnector {
+  connected: boolean;
   client: MongoClient;
   databaseObject: Db;
 
   constructor(uri: string) {
+    this.connected = false;
     this.client = new MongoClient(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
@@ -15,8 +17,11 @@ class DBConnector {
   connect(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.client.connect((err, db) => {
-        if (err) reject(err);
-        else {
+        if (err) {
+          this.connected = false;
+          reject(err);
+        } else {
+          this.connected = true;
           this.databaseObject = db.db('e-go_project');
           resolve(this.databaseObject);
         }
@@ -57,6 +62,7 @@ class DBConnector {
 
   close(): void {
     this.client.close();
+    this.connected = false;
   }
 }
 
