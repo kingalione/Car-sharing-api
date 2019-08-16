@@ -20,9 +20,8 @@ app.get('/cars', (req, res) => {
   if (database.connected) {
     database
       .fetchAll('cars')
-      .then((cars: object[]) => {
-        result = cars;
-        res.json(result);
+      .then(response => {
+        res.json(response);
       })
       .catch(error => {
         console.log(error);
@@ -34,14 +33,11 @@ app.get('/cars', (req, res) => {
 });
 
 app.get('/cars/:id', (req, res) => {
-  let result: object[] = [];
-
   if (database.connected) {
     database
       .fetch('cars', { _id: new ObjectID(req.params.id) })
-      .then(car => {
-        result = car;
-        res.json(result);
+      .then(response => {
+        res.json(response);
       })
       .catch(error => {
         console.log(error);
@@ -57,8 +53,8 @@ app.post('/cars', (req, res) => {
   if (database.connected) {
     database
       .insert('cars', req.body)
-      .then(() => {
-        res.send();
+      .then(response => {
+        res.json(response);
       })
       .catch(error => {
         console.log(error);
@@ -71,14 +67,28 @@ app.post('/cars', (req, res) => {
 
 //update a car
 app.put('/cars/:id', (req, res) => {
-  let result: object[] = [];
-
   if (database.connected) {
     database
       .updateById('cars', req.params.id, req.body)
-      .then(car => {
-        result = car;
-        res.json(result);
+      .then(response => {
+        res.json(response);
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  } else {
+    res.status(500).send('Database not connected yet.');
+  }
+});
+
+//deletes a car
+app.delete('/cars/:id', (req, res) => {
+  if (database.connected) {
+    database
+      .deleteById('cars', req.params.id)
+      .then(response => {
+        res.json(response);
       })
       .catch(error => {
         console.log(error);

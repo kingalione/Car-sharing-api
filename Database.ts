@@ -79,6 +79,26 @@ class Database {
     });
   }
 
+  //deletes a single document by its id
+  deleteById(inside: string, id: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.databaseObject
+        .collection(inside)
+        .deleteOne({ _id: new ObjectID(id) }, (err, res) => {
+          if (err) reject(err);
+          else {
+            //double check if the delete happend because if the id does not exists
+            //there will be no error thrown by mongodb
+            if (res.result.n === 1) resolve(res);
+            else
+              reject(
+                `Document with id: ${id} could not get deleted. Maybe the id is not existing.`
+              );
+          }
+        });
+    });
+  }
+
   close(): void {
     this.client.close();
     this.connected = false;
