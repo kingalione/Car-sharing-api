@@ -1,5 +1,11 @@
 # car-sharing-api
 
+## Import docker file
+
+```
+docker import car-sharing-api.tar
+```
+
 ## Start api with docker container
 
 ```
