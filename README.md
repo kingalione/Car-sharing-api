@@ -1,12 +1,13 @@
-# E-Go-Project
+# car-sharing-api
 
-# car-sharing-app
-
-## Start app with docker container
+## Start api with docker container
 
 ```
 docker run -it -p 3000:3000 car-sharing-api
 ```
+
+Test with:
+localhost:3000/cars
 
 ## Build docker container from project
 
