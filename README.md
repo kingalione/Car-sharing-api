@@ -1,7 +1,34 @@
-# E-Go-Project
+# car-sharing-api
 
-Build docker container with (must be inside project directory):
-'docker build -t car-sharing-app .'
+## Start api with docker container
 
-Run application with (Port 3000 is required for the client):
-'docker run -it -p 3000:3000 car-sharing-api'
+```
+docker run -it -p 3000:3000 car-sharing-api
+```
+
+Test with:
+localhost:3000/cars
+
+## Build docker container from project
+
+```
+docker build -t car-sharing-api .
+```
+
+# Manual way
+
+## Project setup
+
+```
+yarn global add ts-node
+yarn global add typescript
+yarn install
+```
+
+### Compiles and starts server
+
+```
+ts-node server.ts
+```
+
+Copyright 2019: Ali Karadag
