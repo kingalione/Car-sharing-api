@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'console.log' })
+    new winston.transports.File({ filename: './log/console.log' })
   ]
 });
 
