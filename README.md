@@ -1,6 +1,12 @@
 # car-sharing-api
 
-## Start api with docker container
+## Import docker file
+
+```
+docker import car-sharing-api.tar
+```
+
+## Start api with docker container (Port needs to be 3000)
 
 ```
 docker run -it -p 3000:3000 car-sharing-api
